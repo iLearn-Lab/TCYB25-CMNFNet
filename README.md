@@ -1,70 +1,160 @@
-
-
 # Cross-Model Nested Fusion Network for Salient Object Detection in Optical Remote Sensing Images
 
-Mingzhu Xu, Sen Wang, Yupeng Hu, Haoyu Tang, Runmin Cong, Liqiang Nie, IEEE Transactions on Cybernetics 2025.
+> **Official PyTorch implementation of the TCYB 2025 paper "Cross-Model Nested Fusion Network for Salient Object Detection in Optical Remote Sensing Images".**
 
-## Structure
+## Authors
 
-![image-20251122164015033](./Fig/CMNFNet.png)
+**Mingzhu Xu**<sup>1</sup>, **Sen Wang**<sup>1</sup>, **Yupeng Hu**<sup>1</sup>, **Haoyu Tang**<sup>1</sup>, **Runmin Cong**<sup>2</sup>, **Liqiang Nie**<sup>1</sup>*
+
+<sup>1</sup> `Shandong University`  
+<sup>2</sup> `State Key Laboratory of Autonomous Intelligent Unmanned Systems`  
+\* Corresponding author
+
+## Links
+
+- **Paper**: [`IEEE Xplore`](https://ieeexplore.ieee.org/document/11163514)
+- **Code Repository**: [`GitHub`](https://github.com/iLearn-Lab/CMNFNet)
+
+---
+
+## Table of Contents
+
+- [Updates](#updates)
+- [Introduction](#introduction)
+- [Highlights](#highlights)
+- [Method / Framework](#method--framework)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Checkpoints / Models](#checkpoints--models)
+- [Usage](#usage)
+- [Saliency Maps](#saliency-maps)
+- [Citation](#citation)
+- [License](#license)
+
+---
+
+## Updates
+
+- [11/2025] Initial release of CMNFNet training and testing codes.
+- [03/2025] Paper published in IEEE Transactions on Cybernetics.
+
+---
 
 ## Introduction
 
-This repository is the official implementation of our TCYB 2025 paper: [Cross-Model Nested Fusion Network for Salient Object Detection in Optical Remote Sensing Images](https://ieeexplore.ieee.org/document/11163514)
+This project is the official implementation of the paper **"Cross-Model Nested Fusion Network for Salient Object Detection in Optical Remote Sensing Images"**.
 
-In this paper, we propose a novel Cross-Model Nested Fusion Network (CMNFNet), which leverages heterogeneous features to increase the performance of salient object detection in optical remote sensing images (ORSI-SOD). Specifically, CMNFNet comprises two heterogeneous encoders: a conventional CNN-based encoder that can model local pattern features, and a specially designed graph convolutional network (GCN)-based encoder with local and global receptive fields that can model local and global features simultaneously. To effectively differentiate between multiple salient objects of different sizes or complex topological structures within an image, we project the image into two different graphs with different receptive fields and conduct message passing through two parallel graph convolutions. Finally, the heterogeneous features extracted from the two encoders are fused in the well-designed Attention Enhanced Cross Model Nested Fusion Module (AECMNFM). This module is meticulously crafted to integrate features progressively, allowing the model to adaptively eliminate background interference while simultaneously refining the feature representations. Comprehensive experimental analyses on benchmark datasets (ORSSD, EORSSD, and ORSI-4199) demonstrate the superiority of our CMNFNet over 16 state-of-the-art (SOTA) models. The contributions of this paper are as follows:
+CMNFNet proposes a novel cross-model nested fusion network that improves the performance of **optical remote sensing image salient object detection (ORSI-SOD)** by integrating heterogeneous features:
+- **Heterogeneous Encoders**：Consist of a conventional CNN encoder for modeling local patterns and a specially designed Graph Convolutional Network (GCN) encoder that captures both local and global receptive fields.
+- **Encoder-GCN**：Projects the image into two graphs with different receptive fields and performs message passing via parallel graph convolutions, enabling effective perception of objects at multiple scales and with complex topological structures.
+- **AECMNFM Module**：A carefully designed Attention-Enhanced Cross-Model Nested Fusion Module that adaptively suppresses background interference and refines feature representations.
+- **Experimental Performance**：Outperforms 16 state-of-the-art methods on three benchmark datasets: ORSSD, EORSSD, and ORSI-4199.
 
-- We innovatively devise a CMNFNet for ORSI-SOD. Unlike existing models that rely on a single encoder or direct fusion, it employs two heterogeneous encoders (CNN and a custom-designed GCN) and progressively fuses their features through a novel nested fusion strategy, effectively complementing heterogeneous representations.
-- We propose a novel graph-based convolution subnetwork (Encoder-GCN) as an auxiliary encoder. It employs dual parallel graph convolutions in distinct semantic spaces with varying receptive fields to jointly model local and global context, facilitating the multiscale perception of complex salient objects.
-- We propose a novel Attention Enhanced Cross Model Nested Fusion Module (AECMNFM). Unlike traditional fusion methods that cause mutual interference, this approach progressively integrates heterogeneous features in a complementary manner, enhanced by a hybrid attention mechanism that selectively emphasizes salient information while effectively suppressing background noise.
-- We conduct thorough experiments across three challenging datasets to evaluate the overall performance and the component effectiveness, demonstrating that our method outperforms 16 advanced models in ORSI-SOD.
+### Example Description
 
-## Setting Up
+We present **CMNFNet**, a framework for **Salient Object Detection in Optical Remote Sensing Images**.  
+Our method addresses **complex topological structures and multi-scale perception** by introducing **heterogeneous encoders (CNN & GCN)** and a **nested fusion strategy**.  
+This repository provides the official implementation, pretrained weights, and predicted saliency maps.
 
-### Preliminaries
+---
 
-The code has been verified to work with PyTorch v2.0.0 + CUDA 11.8 and Python 3.8.
+## Highlights
 
-### Pretrained weight
+- Introduces a novel **heterogeneous dual-encoder architecture (CNN + GCN)**.
+- Proposes the **Encoder-GCN** subnetwork to jointly model local and global context in different semantic spaces.
+- Develops a **Nested Fusion Module (AECMNFM)** that leverages hybrid attention mechanisms to suppress background noise and fuse heterogeneous features effectively.
+- Demonstrates superior performance on three challenging datasets.
+---
 
-Please download the pretrained weights of resnet and vgg and place them in the specified directory: ./pretrained
-Link:https://pan.baidu.com/s/1FFHeZ7lqsEzUtzD0VSVU5g?pwd=7kgq PW：7kgq
+## Method / Framework
 
-### Package Dependencies
+CMNFNet extracts features in parallel through two heterogeneous encoders and progressively integrates them using a nested fusion strategy.
 
-```
-# 1.Create a new Conda environment with Python 3.8 then activate it
+### Framework Figure
+
+![Framework](./Fig/CMNFNet.png)
+
+**Figure 1.** Overall framework of CMNFNet.
+
+---
+
+## Project Structure
+
+```text
+.
+├── Fig/                   # Framework diagrams and visualization results
+├── pretrained/            # Stores pretrained backbone weights (.pth)
+├── mainNest_resnet.py     # Training/testing script with ResNet backbone
+├── mainNest_vgg.py        # Training/testing script with VGG backbone
+├── requirements.txt       # Environment dependencies
+└── README.md
+````
+
+-----
+
+## Installation
+
+### 1\. Environment
+
+This code has been tested under **PyTorch v2.0.0 + CUDA 11.8** and **Python 3.8**.
+
+### 2\. Setting Up
+
+```bash
+# 1. Create a Conda environment
 conda create -n cmnfnet python=3.8
 conda activate cmnfnet
 
-# 2.Install PyTorch v2.0.0 with a CUDA 11.8 version
+# 2. Install PyTorch and graph-related libraries
 pip install torch==2.0.0 torchvision==0.15.1 --index-url https://download.pytorch.org/whl/cu118
 pip install torch-geometric
 pip install torch-sparse torch-cluster torch-scatter -f https://data.pyg.org/whl/torch-2.0.0+cu118.html
 
-# 3.Install the packages in requirements.txt
+# 3. Install other dependencies
 pip install -r requirements.txt
 ```
 
-## Training
+-----
 
-```
+## Checkpoints / Models
+
+### Pretrained Weights
+
+Please download the pretrained weights for ResNet and VGG and place them in the `./pretrained` directory:
+
+  - **Download Link**: [Baidu Drive](https://pan.baidu.com/s/1FFHeZ7lqsEzUtzD0VSVU5g?pwd=7kgq) (Password: `7kgq`)
+
+-----
+
+## Usage
+
+### Training & Testing
+
+You can run the corresponding script depending on the selected backbone:
+
+```bash
+# Using ResNet backbone
 python mainNest_resnet.py
 
+# Using VGG backbone
 python mainNest_vgg.py
 ```
 
-## Saliency maps
+-----
 
-We provide saliency maps of our CMNFNet（VGG_backbone and ResNet_backbone）on ORSSD, EORSSD, and additional ORSI-4199 datasets.
+## Saliency Maps
 
-Link:https://pan.baidu.com/s/1DQGp3JMOfYJFPyPMcp8pmQ PW:97ds
+We provide saliency maps generated by CMNFNet (with both VGG and ResNet backbones) on the ORSSD, EORSSD, and ORSI-4199 datasets:
+
+  - **Download Link**: [Baidu Drive](https://www.google.com/search?q=https://pan.baidu.com/s/1DQGp3JMOfYJFPyPMcp8pmQ%3Fpwd%3D97ds) (Password: `97ds`)
+
+-----
 
 ## Citation
 
-**Please kindly cite the papers if this code is useful and helpful for your research.**
+If you use this code or method in your research, please cite our paper:
 
-```
+```bitex
 @ARTICLE{11163514,
   author={Xu, Mingzhu and Wang, Sen and Hu, Yupeng and Tang, Haoyu and Cong, Runmin and Nie, Liqiang},
   journal={IEEE Transactions on Cybernetics}, 
@@ -73,7 +163,12 @@ Link:https://pan.baidu.com/s/1DQGp3JMOfYJFPyPMcp8pmQ PW:97ds
   volume={55},
   number={11},
   pages={5332-5345},
-  keywords={Feature extraction;Transformers;Adaptation models;Object detection;Remote sensing;Interference;Semantics;Optical sensors;Optical imaging;Image edge detection;Cross-model nested fusion;graph convolution network;optical remote sensing images (ORSIs);salient object detection (SOD)},
-  doi={10.1109/TCYB.2025.3571913}}
+  doi={10.1109/TCYB.2025.3571913}
+}
 ```
 
+-----
+
+## License
+
+This project is released under the Apache License 2.0.
