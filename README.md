@@ -4,10 +4,10 @@
 
 ## Authors
 
-**Mingzhu Xu**<sup>1</sup>, **Sen Wang**<sup>1</sup>, **Yupeng Hu**<sup>1</sup>, **Haoyu Tang**<sup>1</sup>, **Runmin Cong**<sup>2</sup>, **Liqiang Nie**<sup>1</sup>*
+**Mingzhu Xu**<sup>1</sup>, **Sen Wang**<sup>1</sup>, **Yupeng Hu**<sup>1</sup>\*, **Haoyu Tang**<sup>1</sup>, **Runmin Cong**<sup>1</sup>, **Liqiang Nie**<sup>2</sup>
 
 <sup>1</sup> `Shandong University`  
-<sup>2</sup> `State Key Laboratory of Autonomous Intelligent Unmanned Systems`  
+<sup>2</sup> `Harbin Institute of Technology (Shen Zhen)` 
 \* Corresponding author
 
 ## Links
@@ -19,7 +19,6 @@
 
 ## Table of Contents
 
-- [Updates](#updates)
 - [Introduction](#introduction)
 - [Highlights](#highlights)
 - [Method / Framework](#method--framework)
@@ -30,13 +29,6 @@
 - [Saliency Maps](#saliency-maps)
 - [Citation](#citation)
 - [License](#license)
-
----
-
-## Updates
-
-- [11/2025] Initial release of CMNFNet training and testing codes.
-- [03/2025] Paper published in IEEE Transactions on Cybernetics.
 
 ---
 
