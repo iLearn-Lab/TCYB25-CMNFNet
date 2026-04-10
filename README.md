@@ -13,7 +13,7 @@
 ## Links
 
 - **Paper**: [`IEEE Xplore`](https://ieeexplore.ieee.org/document/11163514)
-- **Code Repository**: [`GitHub`](https://github.com/iLearn-Lab/CMNFNet)
+- **Code Repository**: [`GitHub`](https://github.com/iLearn-Lab/TCYB25-CMNFNet)
 
 ---
 
